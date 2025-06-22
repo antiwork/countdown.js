@@ -1,10 +1,14 @@
 {
   "name": "countdown.js",
   "version": "1.1.0",
+  "description": "Super simple countdown timer library with callback support",
   "main": "lib/countdown.js",
   "scripts": {
-    "test": "jake test"
+    "test": "jake test",
+    "demo": "echo 'Open simple-timer.html in your browser or use a local server'"
   },
+  "keywords": ["countdown", "timer", "javascript", "callback", "utility"],
+  "files": ["lib/countdown.js", "simple-timer.html"],
   "devDependencies" : {
       "jake" : "latest"
     , "mocha" : "latest"

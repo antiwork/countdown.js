@@ -1,8 +1,9 @@
 {
   "name": "countdown.js",
-  "description": "Super simple countdowns.",
+  "description": "Super simple countdown timer library with beautiful demo.",
   "version": "1.1.0",
   "main": "lib/countdown.js",
+  "keywords": ["countdown", "timer", "javascript"],
   "ignore": [
     "test",
     ".gitignore",

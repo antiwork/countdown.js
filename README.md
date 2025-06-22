@@ -3,7 +3,7 @@
 
 Countdown.js is a library that allows developers to set countdowns for any kind of interaction.  For example, if you would
 like to submit a form, Countdown.js allows you to set a 5 second countdown and give the user a chance to cancel the
-submission. You can see it in action [here](http://gumroad.github.io/countdown.js/).
+submission. You can see it in action by opening the included `simple-timer.html` file in your browser.
 
 ## Installation
 
@@ -53,7 +53,34 @@ countdown.getRemainingTime(); //=> 4
 
 ## Example
 
-[http://gumroad.github.io/countdown.js/](http://gumroad.github.io/countdown.js/)
+Open `simple-timer.html` in your browser to see a beautiful 10-second countdown timer demonstration. 
+
+For local development, you can serve it using a local server like Live Server:
+```
+http://127.0.0.1:5500/simple-timer.html
+```
+
+The demo features:
+- ⏱️ Clean 10-second countdown timer
+- 🎨 Dark, cinematic design with glowing effects  
+- 🎮 Interactive controls (click or keyboard)
+- ✨ Smooth animations and particle effects
+- 🚨 Visual urgency indicators for final seconds
+- 🎉 Celebration effects on completion
+
+This demo showcases the core Countdown.js API:
+```javascript
+new Countdown(10, 
+    function onTick(secondsLeft) {
+        // Updates display every second
+        updateTimerDisplay(secondsLeft);
+    },
+    function onComplete() {
+        // Triggers completion effects
+        showCelebration();
+    }
+);
+```
 
 ## Contribute
 
