@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple 10 Second Timer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Mountain silhouette effect */
+        body::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(to top, #0a0a0a 0%, rgba(10, 10, 10, 0.8) 50%, transparent 100%);
+            clip-path: polygon(0 100%, 15% 60%, 25% 80%, 35% 40%, 50% 70%, 65% 30%, 80% 60%, 90% 45%, 100% 55%, 100% 100%);
+            z-index: 1;
+        }
+
+        .timer-container {
+            text-align: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        .timer-display {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 40px 80px;
+            margin-bottom: 50px;
+            position: relative;
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 0 30px rgba(102, 126, 234, 0.3),
+                0 0 60px rgba(118, 75, 162, 0.2),
+                inset 0 0 30px rgba(255, 255, 255, 0.05);
+        }
+
+        .timer-display::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+            border-radius: 25px;
+            z-index: -1;
+            animation: borderGlow 3s linear infinite;
+        }
+
+        @keyframes borderGlow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        .time-text {
+            font-size: 4.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 
+                0 0 10px rgba(255, 255, 255, 0.5),
+                0 0 20px rgba(102, 126, 234, 0.3);
+            letter-spacing: 0.1em;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .start-button {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .start-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .start-button:hover {
+            border-color: rgba(102, 126, 234, 0.8);
+            box-shadow: 
+                0 0 20px rgba(102, 126, 234, 0.3),
+                0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .start-button:hover::before {
+            left: 100%;
+        }
+
+        .start-button:active {
+            transform: translateY(0);
+        }
+
+        .start-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .timer-display.running {
+            animation: pulse 1s ease-in-out infinite alternate;
+        }
+
+        .timer-display.finished {
+            animation: celebrate 0.6s ease-in-out 3;
+            border-color: rgba(76, 175, 80, 0.8);
+            box-shadow: 
+                0 0 40px rgba(76, 175, 80, 0.4),
+                0 0 80px rgba(76, 175, 80, 0.2);
+        }
+
+        .timer-display.finished .time-text {
+            color: #4caf50;
+            text-shadow: 
+                0 0 15px rgba(76, 175, 80, 0.8),
+                0 0 30px rgba(76, 175, 80, 0.4);
+        }
+
+        @keyframes pulse {
+            from { 
+                box-shadow: 
+                    0 0 30px rgba(102, 126, 234, 0.3),
+                    0 0 60px rgba(118, 75, 162, 0.2);
+            }
+            to { 
+                box-shadow: 
+                    0 0 40px rgba(102, 126, 234, 0.5),
+                    0 0 80px rgba(118, 75, 162, 0.3);
+            }
+        }
+
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="timer-container">
+        <div class="timer-display" id="timerDisplay">
+            <div class="time-text" id="timeText">00:10</div>
+        </div>
+        <button class="start-button" id="startButton" onclick="startTimer()">START</button>
+    </div>
+
+    <script src="lib/countdown.js"></script>
+    <script>
+        let currentCountdown = null;
+        let isRunning = false;
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 6 + 's';
+                    particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                    particlesContainer.appendChild(particle);
+                    
+                    // Remove particle after animation
+                    setTimeout(() => {
+                        if (particle.parentNode) {
+                            particle.parentNode.removeChild(particle);
+                        }
+                    }, 8000);
+                }, i * 200);
+            }
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (isRunning) return;
+            
+            isRunning = true;
+            const timerDisplay = document.getElementById('timerDisplay');
+            const timeText = document.getElementById('timeText');
+            const startButton = document.getElementById('startButton');
+            
+            // Update UI
+            timerDisplay.className = 'timer-display running';
+            startButton.textContent = 'RUNNING...';
+            startButton.disabled = true;
+            
+            // Start countdown
+            currentCountdown = new Countdown(10,
+                function onTick(secondsLeft) {
+                    timeText.textContent = formatTime(secondsLeft);
+                    
+                    // Add urgency effect for last 3 seconds
+                    if (secondsLeft <= 3) {
+                        timeText.style.color = '#ff4757';
+                        timeText.style.textShadow = '0 0 15px rgba(255, 71, 87, 0.8), 0 0 30px rgba(255, 71, 87, 0.4)';
+                    }
+                },
+                function onComplete() {
+                    // Timer finished
+                    timerDisplay.className = 'timer-display finished';
+                    timeText.textContent = '00:00';
+                    startButton.textContent = 'FINISHED!';
+                    
+                    // Create celebration particles
+                    for (let i = 0; i < 10; i++) {
+                        setTimeout(() => createParticles(), i * 100);
+                    }
+                    
+                    // Reset after 3 seconds
+                    setTimeout(() => {
+                        resetTimer();
+                    }, 3000);
+                    
+                    isRunning = false;
+                    currentCountdown = null;
+                }
+            );
+        }
+
+        function resetTimer() {
+            const timerDisplay = document.getElementById('timerDisplay');
+            const timeText = document.getElementById('timeText');
+            const startButton = document.getElementById('startButton');
+            
+            timerDisplay.className = 'timer-display';
+            timeText.textContent = '00:10';
+            timeText.style.color = '#ffffff';
+            timeText.style.textShadow = '0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(102, 126, 234, 0.3)';
+            startButton.textContent = 'START';
+            startButton.disabled = false;
+            isRunning = false;
+        }
+
+        // Add keyboard support
+        document.addEventListener('keydown', function(e) {
+            if (e.code === 'Space' || e.code === 'Enter') {
+                e.preventDefault();
+                if (!isRunning) {
+                    startTimer();
+                }
+            }
+        });
+
+        // Initialize particles
+        createParticles();
+        setInterval(createParticles, 3000);
+    </script>
+</body>
+</html> 
