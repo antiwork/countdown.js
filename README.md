@@ -1,6 +1,8 @@
 # Countdown.js [![Build Status](https://travis-ci.org/gumroad/countdown.js.png)](https://travis-ci.org/gumroad/countdown.js)
 
 
+![image](https://github.com/user-attachments/assets/380be6ec-098b-49ab-b82e-2d8a4ee400ee)
+
 Countdown.js is a library that allows developers to set countdowns for any kind of interaction.  For example, if you would
 like to submit a form, Countdown.js allows you to set a 5 second countdown and give the user a chance to cancel the
 submission. You can see it in action by opening the included `simple-timer.html` file in your browser.
